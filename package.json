@@ -1,0 +1,22 @@
+{
+  "name": "jawbreaker-graph",
+  "version": "0.0.1",
+  "description": "A graph depicted by sections of a circle created with the radius of the original circle",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx webpack",
+    "wbuild": "npx webpack --watch"
+  },
+  "author": "Jimy Houlbrook",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.2.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "pixi.js": "^7.2.4"
+  }
+}
