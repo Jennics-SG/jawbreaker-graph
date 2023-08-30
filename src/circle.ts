@@ -25,7 +25,7 @@ export class Circle{
      * @param r         Number      radius
      * @param canEdit   Boolean     can circle be edited
      */
-    constructor(x : number, y : number, r : number, col : number, canEdit : boolean = true){
+    constructor(x : number, y : number, r : number, col : number, percent : number = 0, canEdit : boolean = true){
         this.graphics = new Graphics();
         
         this.x = x;
@@ -46,17 +46,35 @@ export class Circle{
 
         if(!canEdit) return;
 
+
+        // Create HTML Elements
         const container = <HTMLDivElement>document.getElementById("size_inputs");
 
-        const div : HTMLDivElement = document.createElement("div");
+        // Icons to change between color & percent select
+        const percSelect : HTMLButtonElement = document.createElement("button")
+
+        // Div for percentage select
+        const percDiv : HTMLDivElement = document.createElement("div");
+        percDiv.id = "flexDiv"
+        container.appendChild(percDiv);
 
         const percentInput : HTMLInputElement = document.createElement("input");
+        percentInput.type = "number";
+        percentInput.placeholder = percent.toString();
+        percentInput.style.display = "flex";
         percentInput.maxLength = 2;
-        percentInput.step = "number";
+        percDiv.appendChild(percentInput);
 
-        div.appendChild(percentInput);
-        container.appendChild(div);
+        const percentSymbol : HTMLParagraphElement = document.createElement("p");
+        percentSymbol.innerHTML = "%"
+        percDiv.appendChild(percentSymbol);
+
+        // const colorInput : HTMLInputElement = document.createElement("input");
+        // colorInput.type = "color";
+        // colorInput.style.display = "none";
+        // parentDiv.appendChild(colorInput);
     }
+
 
     public getGraphics() : Graphics{
         return this.graphics;
