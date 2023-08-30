@@ -4197,6 +4197,17 @@ eval("\n\nvar GetIntrinsic = __webpack_require__(/*! get-intrinsic */ \"./node_m
 
 /***/ }),
 
+/***/ "./src/circle.ts":
+/*!***********************!*\
+  !*** ./src/circle.ts ***!
+  \***********************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+eval("\n/** Name:   Jawbreaker.circle.ts\n *  Desc:   All logic for tthe circles, both main background and foreground.\n *  Author: Jimy Houlbrook\n *  Date:   30/08/2023\n */\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\nexports.Circle = void 0;\nconst pixi_js_1 = __webpack_require__(/*! pixi.js */ \"./node_modules/pixi.js/lib/index.js\");\nclass Circle {\n    /** Constructor for circle\n     *\n     *  Creates the circle in pixi and creates the html input\n     *  elements to modify them\n     *\n     * @param x         Number      X pos\n     * @param y         Number      Y pos\n     * @param r         Number      radius\n     * @param canEdit   Boolean     can circle be edited\n     */\n    constructor(x, y, r, col, canEdit = true) {\n        this.graphics = new pixi_js_1.Graphics();\n        this.x = x;\n        this.y = y;\n        this.r = r;\n        // Draw circle in background\n        this.graphics.beginFill(col);\n        this.graphics.drawCircle(this.x, this.y, this.r);\n        this.graphics.endFill();\n        // I am hoping that i will be acble\n        // to just change the size of the circle\n        // However, if that doesnt work, I am going\n        // to place the drawing of the circle on a container,\n        // and then clear the container when resizing.\n        if (!canEdit)\n            return;\n        const container = document.getElementById(\"size_inputs\");\n        const div = document.createElement(\"div\");\n        const percentInput = document.createElement(\"input\");\n        percentInput.maxLength = 2;\n        percentInput.step = \"number\";\n        div.appendChild(percentInput);\n        container.appendChild(div);\n    }\n    getGraphics() {\n        return this.graphics;\n    }\n}\nexports.Circle = Circle;\n\n\n//# sourceURL=webpack://jawbreaker-graph/./src/circle.ts?");
+
+/***/ }),
+
 /***/ "./src/main.ts":
 /*!*********************!*\
   !*** ./src/main.ts ***!
@@ -4204,7 +4215,7 @@ eval("\n\nvar GetIntrinsic = __webpack_require__(/*! get-intrinsic */ \"./node_m
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
-eval("\n/** Name:   Jawbreaker main.ts\n *  Desc:   Main file for the graph visualliser, will handle HTML inputs\n *          and creation of tthe PIXI application for visualliser\n *  Auth:   Jimy Houlbrook\n *  Date:   29/08/2023\n */\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\nconst pixi_js_1 = __webpack_require__(/*! pixi.js */ \"./node_modules/pixi.js/lib/index.js\");\nclass Main {\n    constructor() {\n        this.app = new pixi_js_1.Application({\n            height: 500,\n            width: 500,\n            hello: true,\n            view: document.getElementById('chart')\n        });\n    }\n}\nexports[\"default\"] = Main;\ndocument.addEventListener('DOMContentLoaded', () => new Main);\n\n\n//# sourceURL=webpack://jawbreaker-graph/./src/main.ts?");
+eval("\n/** Name:   jawbreaker.main.ts\n *  Desc:   Main file for the graph visualliser, will handle HTML inputs\n *          and creation of tthe PIXI application for visualliser\n *  Auth:   Jimy Houlbrook\n *  Date:   29/08/2023\n */\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\nconst pixi_js_1 = __webpack_require__(/*! pixi.js */ \"./node_modules/pixi.js/lib/index.js\");\nconst circle_1 = __webpack_require__(/*! ./circle */ \"./src/circle.ts\");\nclass Main {\n    constructor() {\n        this.app = new pixi_js_1.Application({\n            height: 500,\n            width: 500,\n            hello: true,\n            view: document.getElementById('chart'),\n            background: \"#89CFF0\",\n            antialias: true\n        });\n        this.sections = new Array;\n        // Container to hold chart\n        const container = new pixi_js_1.Container();\n        this.app.stage.addChild(container);\n        // Create background circle\n        this.bgCircle = new circle_1.Circle(this.app.view.width / 2, this.app.view.height / 2, (this.app.view.width / 8) * 3, 0xFF0000, false);\n        container.addChild(this.bgCircle.getGraphics());\n        const addSectionButton = document.getElementById(\"addSection\");\n        addSectionButton.addEventListener('click', () => {\n            let circle = this.createSection();\n            container.addChild(circle.getGraphics());\n        });\n    }\n    createSection() {\n        console.log(this.sections);\n        let sectionsLength = this.sections.length;\n        let radius = this.sections.length === 0 ?\n            this.bgCircle.r / 2 : this.sections[this.sections.length - 1].r / 2;\n        let newCircle = new circle_1.Circle(this.app.view.width / 2, this.app.view.height / 2, radius, 0x008000);\n        this.sections.push(newCircle);\n        return newCircle;\n    }\n}\nexports[\"default\"] = Main;\ndocument.addEventListener('DOMContentLoaded', () => new Main);\n\n\n//# sourceURL=webpack://jawbreaker-graph/./src/main.ts?");
 
 /***/ }),
 
