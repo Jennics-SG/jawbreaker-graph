@@ -28,7 +28,6 @@ export class Circle{
      */
     constructor(x : number, y : number, r : number, col : number, bgArea : number, canEdit : boolean = true){
         this.graphics = new Graphics();
-        
         this.x = x;
         this.y = y;
         this.r = r;
@@ -37,20 +36,21 @@ export class Circle{
         // Draw circle in background
         this.drawCircle();
 
-        // I am hoping that i will be acble
-        // to just change the size of the circle
-        // However, if that doesnt work, I am going
-        // to place the drawing of the circle on a container,
-        // and then clear the container when resizing.
-
         if(!canEdit) return;
 
-
-        // Create HTML Elements
+        // Create HTML Elements for editing
         const container = <HTMLDivElement>document.getElementById("size_inputs");
 
+        // Container to hold color & perc select icons
+        const iconCont : HTMLDivElement = document.createElement("div");
+        iconCont.id = "optSelect"
+        container.appendChild(iconCont);
+
         // Icons to change between color & percent select
-        const percSelect : HTMLButtonElement = document.createElement("button")
+        const percSelect : HTMLImageElement = document.createElement("img");
+        percSelect.id = "icon";
+        percSelect.src = "./images/percent.png";
+        iconCont.appendChild(percSelect);
 
         // Div for percentage select
         const percDiv : HTMLDivElement = document.createElement("div");

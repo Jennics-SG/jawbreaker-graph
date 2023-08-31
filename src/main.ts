@@ -64,6 +64,7 @@ export default class Main{
      */
     private createSection() : Circle{
 
+
         let lastCircle : Circle = this.sections.length === 0 ?
             this.bgCircle : this.sections[this.sections.length - 1];
 
