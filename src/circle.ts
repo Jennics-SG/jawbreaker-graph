@@ -14,7 +14,11 @@ export class Circle{
     public x : number;
     public y : number;
     public r : number;
-    public col: number;
+    public color: string;
+
+    // Divs that hold perc and color inputs
+    private percDiv : HTMLDivElement;
+    private colorDiv : HTMLDivElement;
 
     /** Constructor for circle
      * 
@@ -26,36 +30,50 @@ export class Circle{
      * @param r         Number      radius
      * @param canEdit   Boolean     can circle be edited
      */
-    constructor(x : number, y : number, r : number, col : number, bgArea : number, canEdit : boolean = true){
+    constructor(x : number, y : number, r : number, color : string, bgArea : number, canEdit : boolean = true){
         this.graphics = new Graphics();
         this.x = x;
         this.y = y;
         this.r = r;
-        this.col = col;
+        this.color = color;
 
         // Draw circle in background
         this.drawCircle();
 
+        // Div for percentage select
+        this.percDiv = document.createElement("div");
+
+        // Div for color select
+        this.colorDiv = document.createElement("div");
+
         if(!canEdit) return;
 
-        // Create HTML Elements for editing
-        const container = <HTMLDivElement>document.getElementById("size_inputs");
+        // CREATE HTML ELEMENTS -----------------------------------------------
+        const container = 
+            <HTMLDivElement>document.getElementById("size_inputs");
 
-        // Container to hold color & perc select icons
+        // Icons to change between color & percent select
         const iconCont : HTMLDivElement = document.createElement("div");
         iconCont.id = "optSelect"
         container.appendChild(iconCont);
 
-        // Icons to change between color & percent select
         const percSelect : HTMLImageElement = document.createElement("img");
         percSelect.id = "icon";
         percSelect.src = "./images/percent.png";
         iconCont.appendChild(percSelect);
+        percSelect.addEventListener('click', () => this.showPercInput());
 
-        // Div for percentage select
-        const percDiv : HTMLDivElement = document.createElement("div");
-        percDiv.id = "flexDiv"
-        container.appendChild(percDiv);
+        const colorSelect : HTMLImageElement = document.createElement("img");
+        colorSelect.id = "icon";
+        colorSelect.src = "./images/color.png";
+        iconCont.appendChild(colorSelect);
+        colorSelect.addEventListener('click', () => this.showColorInput());
+
+        // Percent Input ------------------------------------------------------
+
+        this.percDiv.id = "percDiv"
+        this.percDiv.style.display = 'none';
+        container.appendChild(this.percDiv);
 
         // Calc percentage of area new circle takes up
         let area : number = this.getArea();
@@ -68,34 +86,52 @@ export class Circle{
         percentInput.placeholder = percent.toString();
         percentInput.style.display = "flex";
         percentInput.maxLength = 2;
-        percDiv.appendChild(percentInput);
+        this.percDiv.appendChild(percentInput);
 
         // Resize on input
-        percentInput.addEventListener('input', () : void => this.resize(bgArea, percentInput))
+        percentInput.addEventListener('input', () : void => 
+            this.resize(bgArea, percentInput)
+        );
 
         const percentSymbol : HTMLParagraphElement = document.createElement("p");
         percentSymbol.innerHTML = "%"
-        percDiv.appendChild(percentSymbol);
+        this.percDiv.appendChild(percentSymbol);
 
-        // const colorInput : HTMLInputElement = document.createElement("input");
-        // colorInput.type = "color";
-        // colorInput.style.display = "none";
-        // parentDiv.appendChild(colorInput);
+        // Color Input --------------------------------------------------------
+        this.colorDiv.id = "colorDiv";
+        this.colorDiv.style.display = "none";
+        container.appendChild(this.colorDiv);
+
+        const colorInput : HTMLInputElement = document.createElement("input");
+        colorInput.type = "color";
+        colorInput.value = this.color.replace('0x', "#");
+        this.colorDiv.appendChild(colorInput);
+
+        colorInput.addEventListener('input', () : void =>
+            this.recolor(colorInput)
+        );
+
+        this.showPercInput();
     }
 
-    private drawCircle() {
+    // METHODS ----------------------------------------------------------------
+
+    // Draw a circle at the current size
+    private drawCircle() : void {
         // Clear current graphics
         this.graphics.clear();
 
         // Draw new circle
-        this.graphics.beginFill(this.col);
+        this.graphics.beginFill(this.color);
         this.graphics.drawCircle(this.x, this.y, this.r);
         this.graphics.endFill();
     }
 
-    private resize(bgArea : number, percIpt : HTMLInputElement) {
+    // Resize the circle to inputted size
+    private resize(bgArea : number, percIpt : HTMLInputElement) : void {
         // Ensure input is between max and min value
-        let percent : number = isNaN(parseFloat(percIpt.value)) ? 0 : parseFloat(percIpt.value);
+        let percent : number = isNaN(parseFloat(percIpt.value)) ? 
+            0 : parseFloat(percIpt.value);
 
         if (percent > 100){
             percent = 100;
@@ -109,10 +145,30 @@ export class Circle{
         this.drawCircle();
     }
 
+    private recolor(colorInput : HTMLInputElement) : void {
+        let color = colorInput.value.replace("#", "0x");
+        this.color = color;
+        this.drawCircle();
+    }
+
+    private showPercInput() : void {
+        this.percDiv.style.display = "flex";
+        this.colorDiv.style.display = "none";
+    }
+
+    private showColorInput() : void {
+        this.colorDiv.style.display = "flex";
+        this.percDiv.style.display = "none";
+    }
+
+    // GETTERS ----------------------------------------------------------------
+
+    // Get area
     public getArea() : number {
         return Math.PI * Math.pow(this.r, 2);
     }
 
+    // Get graphics
     public getGraphics() : Graphics{
         return this.graphics;
     }

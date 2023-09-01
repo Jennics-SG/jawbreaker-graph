@@ -1,20 +1,37 @@
 #addSection{
     padding: 2.5%;
 }
-#flexDiv{
+
+#percDiv{
     display: flex;
     flex-direction: row;
+    padding-bottom: 2.5%;
 }
 
-#flexDiv p {
+#percDiv p {
+    margin: 0;
+}
+
+#colorDiv{
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 2.5%;
+}
+
+#colorDiv p {
     margin: 0;
 }
 
 @media (hover: hover){
+    #container{
+        padding: 0;
+        margin: auto;
+        width: 50%;
+    }
+
     #visualliser{
         display: flex;
-        justify-content: center;
-        margin-left: auto;
+        align-items: center;
     }
 
     #interactions{
@@ -34,6 +51,15 @@
     
     #icon{
         width: 5%;
+        padding-left: 5%
+    }
+
+    #percDiv input{
+        width: 25%;
+    }
+
+    #colorDiv input{
+        width: 25%;
     }
 }
 
@@ -61,7 +87,8 @@
     }
 
     #icon{
-        width: 7.5%;
+        width: 10%;
+        padding-left: 20%;
     }
 
     #interactions{

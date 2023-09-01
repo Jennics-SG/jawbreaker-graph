@@ -37,7 +37,7 @@ export default class Main{
 
         // Create background circle
         this.bgCircle = new Circle(
-            this.app.view.width / 2, this.app.view.height / 2, (this.app.view.width / 8) * 3, 0xFF0000, 0, false
+            this.app.view.width / 2, this.app.view.height / 2, (this.app.view.width / 8) * 3, "0xFF0000", 0, false
         );
 
         // Container to hold chart
@@ -63,8 +63,6 @@ export default class Main{
      * @returns Circle  The new circle that has been created.
      */
     private createSection() : Circle{
-
-
         let lastCircle : Circle = this.sections.length === 0 ?
             this.bgCircle : this.sections[this.sections.length - 1];
 
@@ -78,7 +76,7 @@ export default class Main{
         let areaOfBg = this.bgCircle.getArea();
 
         let newCircle : Circle = new Circle(
-            this.app.view.width / 2, this.app.view.height / 2, radius, 0x008000, areaOfBg
+            this.app.view.width / 2, this.app.view.height / 2, radius, "0x008000", areaOfBg
         );
 
         this.sections.push(newCircle);
